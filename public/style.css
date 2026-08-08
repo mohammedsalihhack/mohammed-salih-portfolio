@@ -558,7 +558,6 @@ footer {
     }
 
 }
-```css
 /* =========================================
    MOHAMMED SALIH - CYBERSECURITY PORTFOLIO
    Main Stylesheet
@@ -1158,8 +1157,6 @@ footer p {
         padding: 22px;
     }
 }
-```
-```css
 /* =========================================
    WRITEUPS PAGE
    ========================================= */
@@ -1652,7 +1649,6 @@ footer p {
     color: #00ff9c;
 }
 
-```css
 /* =========================================
    CTF WRITEUPS PAGE
    ========================================= */
@@ -2044,6 +2040,348 @@ footer p {
     }
 
 }
-```
 
+/* =========================================================
+   MOHAMMED SALIH — CYBERSECURITY VISUAL SYSTEM (v2)
+   Circuit background, glass panels, floating UI, typography.
+   Appended intentionally — later rules win the cascade, so
+   nothing above needs to be rewritten.
+   ========================================================= */
 
+:root {
+    --cyber-bg-0: #05070c;
+    --cyber-bg-1: #070c14;
+    --cyber-navy: #0a1220;
+
+    --cyber-cyan: #00e5ff;
+    --cyber-blue: #3b82f6;
+    --cyber-violet: #8b5cf6;
+    --cyber-magenta: #d946ef;
+    --cyber-green: #00ff9c;
+
+    --cyber-line: rgba(148, 197, 255, 0.16);
+    --cyber-glass: rgba(10, 16, 26, 0.55);
+    --cyber-glass-border: rgba(120, 180, 255, 0.16);
+}
+
+/* =========================================================
+   TYPOGRAPHY
+   ========================================================= */
+
+body {
+    font-family: "Times New Roman", Times, serif;
+    background: var(--cyber-bg-0);
+}
+
+.logo,
+.nav-links a,
+.btn,
+.tag,
+.skill,
+.contact-label,
+.section-tag,
+.project-category,
+.certificate-category,
+.writeup-category,
+code,
+pre,
+pre code {
+    font-family: "Times New Roman", Times, serif;
+}
+
+/* Keep monospace only where code/flags are literally displayed */
+.writeup-block code,
+.writeup-block pre code,
+.flag-result code,
+.flag-box code,
+.compression-chain span,
+.writeup-id,
+.writeup-number,
+.writeup-table,
+.skill-pills span {
+    font-family: "Courier New", Consolas, monospace;
+}
+
+/* =========================================================
+   CIRCUIT BOARD BACKGROUND (fixed, behind all content)
+   ========================================================= */
+
+body {
+    position: relative;
+    overflow-x: hidden;
+}
+
+.cyber-circuit-bg {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -20;
+    pointer-events: none;
+    background:
+        radial-gradient(ellipse at 20% 15%, rgba(59, 130, 246, 0.10), transparent 45%),
+        radial-gradient(ellipse at 80% 85%, rgba(139, 92, 246, 0.08), transparent 45%),
+        linear-gradient(180deg, var(--cyber-bg-0) 0%, var(--cyber-navy) 55%, var(--cyber-bg-1) 100%);
+}
+
+.cyber-circuit-bg svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+/* faint technical grid under the circuits */
+.cyber-circuit-bg::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+        linear-gradient(var(--cyber-line) 1px, transparent 1px),
+        linear-gradient(90deg, var(--cyber-line) 1px, transparent 1px);
+    background-size: 46px 46px;
+    opacity: 0.35;
+    mask-image: radial-gradient(ellipse at 50% 30%, black 0%, transparent 75%);
+    -webkit-mask-image: radial-gradient(ellipse at 50% 30%, black 0%, transparent 75%);
+}
+
+.circuit-trace {
+    fill: none;
+    stroke-width: 1.4;
+}
+
+.circuit-trace.layer-back {
+    opacity: 0.22;
+    stroke-width: 1.1;
+}
+
+.circuit-trace.layer-mid {
+    opacity: 0.38;
+}
+
+.circuit-trace.layer-front {
+    opacity: 0.55;
+    stroke-width: 1.7;
+}
+
+.circuit-pulse {
+    fill: none;
+    stroke-linecap: round;
+    filter: drop-shadow(0 0 3px currentColor) drop-shadow(0 0 7px currentColor);
+    animation-name: pulseTravel;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+}
+
+.circuit-node {
+    filter: drop-shadow(0 0 4px currentColor);
+    animation: nodePulse 3.6s ease-in-out infinite;
+}
+
+@keyframes pulseTravel {
+    to {
+        stroke-dashoffset: -1400;
+    }
+}
+
+@keyframes nodePulse {
+    0%, 100% { opacity: 0.35; r: 2.4; }
+    50% { opacity: 1; r: 3.4; }
+}
+
+/* Individual pulse timing / direction variety */
+.circuit-pulse.p1 { color: var(--cyber-cyan); stroke: var(--cyber-cyan); animation-duration: 9s; }
+.circuit-pulse.p2 { color: var(--cyber-blue); stroke: var(--cyber-blue); animation-duration: 13s; animation-direction: reverse; }
+.circuit-pulse.p3 { color: var(--cyber-violet); stroke: var(--cyber-violet); animation-duration: 16s; }
+.circuit-pulse.p4 { color: var(--cyber-cyan); stroke: var(--cyber-cyan); animation-duration: 11s; animation-direction: reverse; }
+.circuit-pulse.p5 { color: var(--cyber-green); stroke: var(--cyber-green); animation-duration: 20s; }
+.circuit-pulse.p6 { color: var(--cyber-blue); stroke: var(--cyber-blue); animation-duration: 14s; animation-direction: reverse; }
+.circuit-pulse.p7 { color: var(--cyber-magenta); stroke: var(--cyber-magenta); animation-duration: 18s; }
+.circuit-pulse.p8 { color: var(--cyber-cyan); stroke: var(--cyber-cyan); animation-duration: 10s; animation-direction: reverse; }
+
+.circuit-node.n1 { color: var(--cyber-cyan); fill: var(--cyber-cyan); }
+.circuit-node.n2 { color: var(--cyber-blue); fill: var(--cyber-blue); }
+.circuit-node.n3 { color: var(--cyber-violet); fill: var(--cyber-violet); }
+.circuit-node.n4 { color: var(--cyber-green); fill: var(--cyber-green); }
+
+@media (prefers-reduced-motion: reduce) {
+    .circuit-pulse {
+        animation: none;
+        opacity: 0.25;
+    }
+    .circuit-node {
+        animation: none;
+        opacity: 0.6;
+    }
+}
+
+@media (max-width: 800px) {
+    .cyber-circuit-bg svg .layer-back,
+    .cyber-circuit-bg svg .desktop-only {
+        display: none;
+    }
+}
+
+/* =========================================================
+   NAVIGATION — glass polish
+   ========================================================= */
+
+.navbar {
+    background: rgba(6, 10, 17, 0.72) !important;
+    backdrop-filter: blur(14px) saturate(140%);
+    -webkit-backdrop-filter: blur(14px) saturate(140%);
+    border-bottom: 1px solid var(--cyber-glass-border) !important;
+    box-shadow: 0 1px 0 rgba(0, 229, 255, 0.06), 0 12px 30px rgba(0, 0, 0, 0.35);
+}
+
+.nav-links a {
+    position: relative;
+}
+
+.nav-links a::after {
+    background: linear-gradient(90deg, var(--cyber-cyan), var(--cyber-violet)) !important;
+}
+
+/* =========================================================
+   GLASS CARDS — cards, project cards, certificate boxes,
+   contact cards, writeup cards
+   ========================================================= */
+
+.card,
+.project-card,
+.certificate-box,
+.contact-card,
+.writeup-card,
+.full-writeup,
+.writeup-skills,
+.skills-demonstrated,
+.contact-cta {
+    background: var(--cyber-glass) !important;
+    border: 1px solid var(--cyber-glass-border) !important;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    position: relative;
+    transition:
+        transform 0.28s ease,
+        border-color 0.28s ease,
+        box-shadow 0.28s ease;
+}
+
+.card:hover,
+.project-card:hover,
+.certificate-box:hover,
+.contact-card:hover,
+.writeup-card:hover {
+    border-color: rgba(0, 229, 255, 0.55) !important;
+    box-shadow:
+        0 16px 40px rgba(0, 0, 0, 0.4),
+        0 0 22px rgba(0, 229, 255, 0.12);
+}
+
+/* subtle animated top edge light on hover, reusing existing ::before hooks */
+.contact-card::before,
+.writeup-card::before {
+    background: linear-gradient(90deg, var(--cyber-cyan), var(--cyber-violet)) !important;
+    box-shadow: 0 0 8px rgba(0, 229, 255, 0.6);
+}
+
+/* =========================================================
+   BUTTONS — floating glass buttons with light sweep
+   ========================================================= */
+
+.btn,
+.btn-primary,
+.btn-secondary,
+.verify-button {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    background: rgba(10, 16, 26, 0.65) !important;
+    color: var(--cyber-cyan) !important;
+    border: 1px solid rgba(0, 229, 255, 0.4) !important;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+    transition:
+        transform 0.22s ease,
+        box-shadow 0.22s ease,
+        border-color 0.22s ease,
+        color 0.22s ease,
+        background 0.22s ease;
+}
+
+.btn::before,
+.btn-primary::before,
+.btn-secondary::before,
+.verify-button::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(120deg, transparent 20%, rgba(0, 229, 255, 0.28) 50%, transparent 80%);
+    transform: translateX(-120%);
+    transition: transform 0.5s ease;
+}
+
+.btn:hover,
+.btn-primary:hover,
+.btn-secondary:hover,
+.verify-button:hover {
+    transform: translateY(-3px);
+    border-color: var(--cyber-cyan) !important;
+    box-shadow:
+        0 10px 24px rgba(0, 0, 0, 0.4),
+        0 0 18px rgba(0, 229, 255, 0.3);
+}
+
+.btn:hover::before,
+.btn-primary:hover::before,
+.btn-secondary:hover::before,
+.verify-button:hover::before {
+    transform: translateX(120%);
+}
+
+.btn:active,
+.btn-primary:active,
+.btn-secondary:active,
+.verify-button:active {
+    transform: translateY(0px) scale(0.98);
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.35);
+}
+
+/* =========================================================
+   SKILL / TAG PILLS — quiet cyber accent
+   ========================================================= */
+
+.skill,
+.project-tags span,
+.writeup-tags span,
+.skill-pills span {
+    background: rgba(10, 16, 26, 0.6) !important;
+    border-color: var(--cyber-glass-border) !important;
+    transition: border-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+
+.skill:hover,
+.project-tags span:hover {
+    border-color: var(--cyber-cyan) !important;
+    color: var(--cyber-cyan);
+    transform: translateY(-2px);
+}
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
+footer {
+    background: rgba(6, 10, 17, 0.6) !important;
+    border-top: 1px solid var(--cyber-glass-border) !important;
+    backdrop-filter: blur(8px);
+}
+
+/* =========================================================
+   OLD NEON DOT ELEMENTS — retired, hidden if markup remains
+   ========================================================= */
+
+.neon-light {
+    display: none !important;
+}
