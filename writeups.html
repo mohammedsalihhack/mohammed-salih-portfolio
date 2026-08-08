@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Writeups | Mohammed Salih</title>
+
+    <meta name="description"
+        content="Cybersecurity CTF writeups by Mohammed Salih covering reverse engineering and digital forensics.">
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- NAVIGATION -->
+    <nav class="navbar">
+        <div class="container nav-container">
+
+            <a href="index.html" class="logo">
+                MOHAMMED SALIH
+            </a>
+
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="projects.html">Projects</a></li>
+                <li><a href="writeups.html" class="active">Writeups</a></li>
+                <li><a href="certifications.html">Certifications</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+
+        </div>
+    </nav>
+
+
+    <!-- MAIN CONTENT -->
+    <main>
+
+        <section class="writeups-page">
+
+            <div class="container">
+
+                <!-- PAGE HEADER -->
+                <div class="writeups-header">
+
+                    <span class="section-tag">
+                        CYBERSECURITY RESEARCH
+                    </span>
+
+                    <h1>
+                        CTF Writeups
+                    </h1>
+
+                    <p>
+                        Practical cybersecurity investigations covering
+                        reverse engineering, digital forensics, file analysis,
+                        Linux tools, and CTF problem solving.
+                    </p>
+
+                </div>
+
+
+                <!-- =====================================
+                     WRITEUP 01 — XOR
+                     ===================================== -->
+
+                <article class="full-writeup">
+
+                    <div class="writeup-top">
+
+                        <div>
+                            <span class="writeup-category">
+                                REVERSE ENGINEERING
+                            </span>
+
+                            <h2>
+                                XOR — Ghidra Reverse Engineering
+                            </h2>
+                        </div>
+
+                        <span class="writeup-id">
+                            #01
+                        </span>
+
+                    </div>
+
+
+                    <!-- Challenge -->
+                    <div class="writeup-block">
+
+                        <h3>Challenge Information</h3>
+
+                        <p>
+                            <strong>Challenge:</strong> XOR
+                        </p>
+
+                        <p>
+                            <strong>Category:</strong>
+                            Reverse Engineering
+                        </p>
+
+                        <p>
+                            <strong>Tool:</strong> Ghidra
+                        </p>
+
+                        <p>
+                            <strong>Objective:</strong>
+                            Analyze the ELF binary, identify the password
+                            transformation and recover the hidden flag.
+                        </p>
+
+                    </div>
+
+
+                    <!-- Step 1 -->
+                    <div class="writeup-block">
+
+                        <h3>1. Open the Binary in Ghidra</h3>
+
+                        <p>
+                            Open the binary named
+                            <code>xor</code> in Ghidra.
+                        </p>
+
+                        <pre><code>File
+↓
+Import File
+↓
+Select xor
+↓
+Analyze</code></pre>
+
+                        <p>
+                            Wait until Ghidra completes the automatic
+                            analysis.
+                        </p>
+
+                    </div>
+
+
+                    <!-- Step 2 -->
+                    <div class="writeup-block">
+
+                        <h3>2. Find the main Function</h3>
+
+                        <p>
+                            Navigate through:
+                        </p>
+
+                        <pre><code>Symbol Tree
+↓
+Functions
+↓
+main</code></pre>
+
+                        <p>
+                            The decompiler shows the main program logic.
+                            The program asks the user for a password:
+                        </p>
+
+                        <pre><code>printf("Enter a Password: ");</code></pre>
+
+                    </div>
+
+
+                    <!-- Step 3 -->
+                    <div class="writeup-block">
+
+                        <h3>3. Identify the Encryption Function</h3>
+
+                        <p>
+                            Inside <code>main()</code>, the user input is
+                            passed to:
+                        </p>
+
+                        <pre><code>encrypt(local_78, __edflag);</code></pre>
+
+                        <p>
+                            The important operation inside
+                            <code>encrypt()</code> is:
+                        </p>
+
+                        <pre><code>__block[local_1c] =
+    __block[local_1c] + -10;</code></pre>
+
+                        <p>
+                            This means that every character is shifted
+                            backwards by 10 ASCII positions.
+                        </p>
+
+                        <pre><code>Encrypted = Original - 10</code></pre>
+
+                    </div>
+
+
+                    <!-- Step 4 -->
+                    <div class="writeup-block">
+
+                        <h3>4. Find the Encrypted Password</h3>
+
+                        <p>
+                            The binary contains the following transformed
+                            password:
+                        </p>
+
+                        <pre><code>9J&lt;q=^':h*#*d:#+Jh*9)#'+#&gt;)'Bs</code></pre>
+
+                        <p>
+                            The program compares the transformed user
+                            input against this stored string.
+                        </p>
+
+                    </div>
+
+
+                    <!-- Step 5 -->
+                    <div class="writeup-block">
+
+                        <h3>5. Reverse the Transformation</h3>
+
+                        <p>
+                            The encryption operation is:
+                        </p>
+
+                        <pre><code>Encrypted = Original - 10</code></pre>
+
+                        <p>
+                            Therefore, the reverse operation is:
+                        </p>
+
+                        <pre><code>Original = Encrypted + 10</code></pre>
+
+                        <p>
+                            Example:
+                        </p>
+
+                        <pre><code>9 → ASCII 57
+57 + 10 = 67
+67 → C
+
+J → ASCII 74
+74 + 10 = 84
+84 → T
+
+&lt; → ASCII 60
+60 + 10 = 70
+70 → F</code></pre>
+
+                        <p>
+                            Therefore:
+                        </p>
+
+                        <pre><code>9J&lt; → CTF</code></pre>
+
+                    </div>
+
+
+                    <!-- Step 6 -->
+                    <div class="writeup-block">
+
+                        <h3>6. Decode Using Python</h3>
+
+                        <pre><code>enc = "9J&lt;q=^':h*#*d:#+Jh*9)#'+#&gt;)'Bs"
+
+flag = ""
+
+for c in enc:
+    flag += chr(ord(c) + 10)
+
+print(flag)</code></pre>
+
+                        <p>
+                            Output:
+                        </p>
+
+                        <pre><code>CTF{Gh1Dr4-4nD-5Tr4C3-15-H31L}</code></pre>
+
+                    </div>
+
+
+                    <!-- XOR FLAG -->
+                    <div class="flag-result">
+
+                        <span>
+                            FLAG RECOVERED
+                        </span>
+
+                        <code>
+                            CTF{Gh1Dr4-4nD-5Tr4C3-15-H31L}
+                        </code>
+
+                    </div>
+
+
+                    <!-- XOR FLOW -->
+                    <div class="writeup-block">
+
+                        <h3>Reverse Engineering Flow</h3>
+
+                        <pre><code>ELF Binary
+    ↓
+file / checksec
+    ↓
+Ghidra
+    ↓
+main()
+    ↓
+encrypt()
+    ↓
+Character - 10
+    ↓
+Encrypted String
+    ↓
+Reverse +10
+    ↓
+Flag</code></pre>
+
+                    </div>
+
+                </article>
+
+
+                <!-- =====================================
+                     WRITEUP 02 — X-TENSION
+                     ===================================== -->
+
+                <article class="full-writeup">
+
+                    <div class="writeup-top">
+
+                        <div>
+                            <span class="writeup-category">
+                                DIGITAL FORENSICS
+                            </span>
+
+                            <h2>
+                                x-tension — File Forensics
+                            </h2>
+                        </div>
+
+                        <span class="writeup-id">
+                            #02
+                        </span>
+
+                    </div>
+
+
+                    <!-- Challenge -->
+                    <div class="writeup-block">
+
+                        <h3>Challenge Information</h3>
+
+                        <p>
+                            <strong>Challenge:</strong>
+                            x-tension
+                        </p>
+
+                        <p>
+                            <strong>Category:</strong>
+                            Digital Forensics / File Analysis
+                        </p>
+
+                        <p>
+                            <strong>Objective:</strong>
+                            Identify the true format of a suspicious file
+                            disguised as a PDF and recover the hidden flag.
+                        </p>
+
+                    </div>
+
+
+                    <!-- Step 1 -->
+                    <div class="writeup-block">
+
+                        <h3>1. Initial File Analysis</h3>
+
+                        <p>
+                            The provided file was named:
+                        </p>
+
+                        <pre><code>confidential.pdf</code></pre>
+
+                        <p>
+                            Instead of trusting the extension, the file
+                            was examined using:
+                        </p>
+
+                        <pre><code>file confidential.pdf</code></pre>
+
+                        <p>
+                            Result:
+                        </p>
+
+                        <pre><code>confidential.pdf: shell archive text</code></pre>
+
+                        <p>
+                            The file was not actually a PDF. It was a
+                            <strong>Shell Archive (SHAR)</strong>.
+                        </p>
+
+                    </div>
+
+
+                    <!-- Step 2 -->
+                    <div class="writeup-block">
+
+                        <h3>2. Extract the SHAR Archive</h3>
+
+                        <pre><code>unshar confidential.pdf</code></pre>
+
+                        <p>
+                            This produced:
+                        </p>
+
+                        <pre><code>archive.ar</code></pre>
+
+                    </div>
+
+
+                    <!-- Step 3 -->
+                    <div class="writeup-block">
+
+                        <h3>3. Analyze the AR Archive</h3>
+
+                        <pre><code>file archive.ar
+ar t archive.ar
+ar x archive.ar</code></pre>
+
+                        <p>
+                            The archive contained:
+                        </p>
+
+                        <pre><code>archive.cpio</code></pre>
+
+                    </div>
+
+
+                    <!-- Step 4 -->
+                    <div class="writeup-block">
+
+                        <h3>4. Extract the CPIO Archive</h3>
+
+                        <pre><code>cpio -idmv &lt; archive.cpio</code></pre>
+
+                        <p>
+                            The extracted file was:
+                        </p>
+
+                        <pre><code>flag.gz.bz2</code></pre>
+
+                    </div>
+
+
+                    <!-- Step 5 -->
+                    <div class="writeup-block">
+
+                        <h3>5. Recursive Decompression</h3>
+
+                        <p>
+                            Each layer was identified using the
+                            <code>file</code> command before applying
+                            the appropriate decompression utility.
+                        </p>
+
+                        <div class="compression-chain">
+
+                            <div>
+                                <span>01</span>
+                                BZIP2 — <code>bunzip2</code>
+                            </div>
+
+                            <div>
+                                <span>02</span>
+                                GZIP — <code>gunzip</code>
+                            </div>
+
+                            <div>
+                                <span>03</span>
+                                LZIP — <code>lzip -d</code>
+                            </div>
+
+                            <div>
+                                <span>04</span>
+                                LZ4 — <code>lz4 -d</code>
+                            </div>
+
+                            <div>
+                                <span>05</span>
+                                LZMA — <code>xz --format=lzma --decompress</code>
+                            </div>
+
+                            <div>
+                                <span>06</span>
+                                LZOP — <code>lzop -dc</code>
+                            </div>
+
+                            <div>
+                                <span>07</span>
+                                XZ — <code>xz -dc</code>
+                            </div>
+
+                            <div>
+                                <span>08</span>
+                                ASCII / HEX — <code>xxd</code>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Step 6 -->
+                    <div class="writeup-block">
+
+                        <h3>6. Final Hexadecimal Data</h3>
+
+                        <p>
+                            The final output contained:
+                        </p>
+
+                        <pre><code>4354467b7033346b5f347263683176335f7033726630726d346e63337d</code></pre>
+
+                        <p>
+                            The hexadecimal data was decoded using:
+                        </p>
+
+                        <pre><code>echo "4354467b7033346b5f347263683176335f7033726630726d346e63337d" | xxd -r -p</code></pre>
+
+                    </div>
+
+
+                    <!-- X-TENSION FLAG -->
+                    <div class="flag-result">
+
+                        <span>
+                            FLAG RECOVERED
+                        </span>
+
+                        <code>
+                            CTF{p34k_4rch1v3_p3rf0rm4nc3}
+                        </code>
+
+                    </div>
+
+
+                    <!-- Archive Chain -->
+                    <div class="writeup-block">
+
+                        <h3>Archive &amp; Compression Chain</h3>
+
+                        <pre><code>confidential.pdf
+        ↓
+SHAR Archive
+        ↓
+archive.ar
+        ↓
+archive.cpio
+        ↓
+flag.gz.bz2
+        ↓
+BZIP2
+        ↓
+GZIP
+        ↓
+LZIP
+        ↓
+LZ4
+        ↓
+LZMA
+        ↓
+LZOP
+        ↓
+XZ
+        ↓
+ASCII / HEX
+        ↓
+Hex Decode
+        ↓
+CTF{p34k_4rch1v3_p3rf0rm4nc3}</code></pre>
+
+                    </div>
+
+
+                    <!-- Key Learning -->
+                    <div class="writeup-block">
+
+                        <h3>Key Learnings</h3>
+
+                        <ul>
+
+                            <li>
+                                File extensions should never be blindly
+                                trusted during forensic analysis.
+                            </li>
+
+                            <li>
+                                The <code>file</code> command helps identify
+                                the actual file format.
+                            </li>
+
+                            <li>
+                                Nested archives require systematic
+                                extraction and verification.
+                            </li>
+
+                            <li>
+                                Every extraction layer should be checked
+                                before continuing.
+                            </li>
+
+                            <li>
+                                Hexadecimal data can be another final
+                                encoding layer.
+                            </li>
+
+                        </ul>
+
+                    </div>
+
+                </article>
+
+
+                <!-- SKILLS -->
+                <section class="writeup-skills">
+
+                    <span class="section-tag">
+                        TECHNICAL SKILLS
+                    </span>
+
+                    <h2>
+                        Skills Demonstrated
+                    </h2>
+
+                    <div class="skill-pills">
+
+                        <span>Ghidra</span>
+                        <span>Reverse Engineering</span>
+                        <span>Digital Forensics</span>
+                        <span>ELF Analysis</span>
+                        <span>Linux</span>
+                        <span>File Analysis</span>
+                        <span>Archive Analysis</span>
+                        <span>Python</span>
+                        <span>ASCII Analysis</span>
+                        <span>CTF Problem Solving</span>
+
+                    </div>
+
+                </section>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- FOOTER -->
+    <footer>
+
+        <div class="container">
+
+            <p>
+                © 2026 Mohammed Salih S. All rights reserved.
+            </p>
+
+        </div>
+
+    </footer>
+
+</body>
+
+</html>
+```
+
